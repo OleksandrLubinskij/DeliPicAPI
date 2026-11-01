@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+sqlalchemy[asyncio]
+psycopg2-binary
+python-dotenv
+pydantic-settings
+alembic
+pgvector
+httpx
+python-jose[cryptography]>=3.3.0
+bcrypt==3.2.2
+passlib
+python-multipart
+aiofiles
+Pillow
+asyncpg
+aiobotocore

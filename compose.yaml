@@ -1,0 +1,44 @@
+services:
+  db:
+    image: pgvector/pgvector:pg18-trixie
+    container_name: delipic_db
+    restart: on-failure
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5434:5432"
+    volumes:
+      - db_data:/var/lib/postgresql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - delipic-net
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: delipic-backend-img
+    container_name: delipic-backend
+    restart: on-failure
+    ports:
+      - "8002:8001"
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}"
+    volumes:
+      - .:/DeliPicAPI
+    networks:
+      - delipic-net
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+
+volumes:
+  db_data:
+
+networks:
+  delipic-net:
+    driver: bridge
