@@ -1,6 +1,6 @@
 from typing import AsyncGenerator
 
-from core.config import db_settings
+from app.core.config import db_settings
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 
 url = db_settings.db_address.get_secret_value()

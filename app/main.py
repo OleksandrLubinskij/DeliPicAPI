@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from database.connection import engine
-from database.init_db import physical_activity_seeder
+from app.database.connection import engine
+from app.database.init_db import physical_activity_seeder
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
