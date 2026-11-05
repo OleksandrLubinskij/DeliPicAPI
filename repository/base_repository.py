@@ -30,16 +30,16 @@ class BaseRepo(Generic[Entity]):
         ).where(
             self.entity.id == id
         )
+        if fields:
+            selected_fields = []
+            for field in fields:
+                if hasattr(self.entity, field):
+                    attr = getattr(self.entity, field)
+                    selected_fields.append(attr)
 
-        selected_fields = []
-        for field in fields:
-            if hasattr(self.entity, field):
-                attr = getattr(self.entity, field)
-                selected_fields.append(attr)
+            stmt = stmt.options(load_only(*selected_fields))
 
-        stmt = stmt.options(load_only(*selected_fields))
-
-        result = (await self.db.execute(stmt)).sclar()
+        result = (await self.db.execute(stmt)).scalar()
 
         return result
 
@@ -59,14 +59,17 @@ class BaseRepo(Generic[Entity]):
 
         for key, value in new_data.items():
             setattr(instance, key, value)
-
+            
+        await self.db.flush()
+        await self.db.refresh(instance)
         return instance
 
     async def delete(self,
-                     id: int) -> Entity | None:
+                     id: int) -> bool:
         instance = await self.get_by_id(id)
         if not instance:
             return False
 
         await self.db.delete(instance)
+        await self.db.flush()
         return True
