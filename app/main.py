@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, status
 from contextlib import asynccontextmanager
-from app.database.connection import engine
-from app.database.init_db import physical_activity_seeder
+
+from fastapi.responses import JSONResponse
+from database.connection import engine
+from database.init_db import physical_activity_seeder
+from core.exceptions import NotFoundError
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -18,3 +21,10 @@ app = FastAPI(lifespan=lifespan)
 async def gingerbread():
     return {"message": "Домашні пряники"}
 
+
+@app.exception_handler(NotFoundError)
+async def not_found(request: Request, exc: NotFoundError):
+    return JSONResponse(
+        status_code=status.HTTP_404_NOT_FOUND,
+        content={"detail": "Not found!"}
+    )
