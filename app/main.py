@@ -2,10 +2,11 @@ from fastapi import FastAPI, Request, status
 from contextlib import asynccontextmanager
 
 from fastapi.responses import JSONResponse
-from app.database.connection import engine
-from app.database.init_db import physical_activity_seeder
-from app.core.exceptions import NotFoundError
+from .database.connection import engine
+from .database.init_db import physical_activity_seeder
+from .core.exceptions import NotFoundError
 
+from .routers import diary, physical_activity, product, user_weight_log, user
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await physical_activity_seeder()
@@ -16,6 +17,12 @@ async def lifespan(app: FastAPI):
         await engine.dispose()
 
 app = FastAPI(lifespan=lifespan)
+
+app.include_router(user.router)
+app.include_router(product.router)
+app.include_router(diary.router)
+app.include_router(user_weight_log.router)
+app.include_router(physical_activity.router)
 
 @app.get("/")
 async def gingerbread():
