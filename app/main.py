@@ -2,9 +2,9 @@ from fastapi import FastAPI, Request, status
 from contextlib import asynccontextmanager
 
 from fastapi.responses import JSONResponse
-from database.connection import engine
-from database.init_db import physical_activity_seeder
-from core.exceptions import NotFoundError
+from app.database.connection import engine
+from app.database.init_db import physical_activity_seeder
+from app.core.exceptions import NotFoundError
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
