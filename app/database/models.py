@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy import Float, Index, String, Integer, DateTime, ForeignKey, func, Enum
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from pgvector.sqlalchemy import Vector
-from .db_enums import UserGender
+from .db_enums import UserGender, UserRole
 
 class Base(DeclarativeBase):
     __abstract__ = True
@@ -18,21 +18,36 @@ class PhysicalActivityInfo(Base):
 
     users: Mapped[List["User"]] = relationship(back_populates="activity_info")
 
+class UserWeightLog(Base):
+    __tablename__ = "user_weight_log"
+    
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    weight: Mapped[float] = mapped_column(Float, nullable=False)
+    timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    user: Mapped["User"] = relationship(back_populates="weight_log")
+
 class User(Base):
     __tablename__ = "user"
-    
+
+    role: Mapped[UserRole] = mapped_column(Enum(UserRole))
     login: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     gender: Mapped[UserGender] = mapped_column(Enum(UserGender))    
     weight: Mapped[float] = mapped_column(Float, nullable=False)
     height:  Mapped[float] = mapped_column(Float, nullable=False)
     birth_year: Mapped[int] = mapped_column(Integer, nullable=False)
-    physical_activity: Mapped[int] = mapped_column(Integer, ForeignKey("physical_activity_info.id", ondelete="CASCADE"), nullable=False)
+    physical_activity: Mapped[int] = mapped_column(Integer, 
+                                                   ForeignKey("physical_activity_info.id", ondelete="CASCADE"), 
+                                                   nullable=False)
 
     activity_info: Mapped["PhysicalActivityInfo"] = relationship(back_populates="users")
     products: Mapped[List["Product"]] = relationship(back_populates="user", cascade="all, delete-orphan")
     diary_entries: Mapped[List["Diary"]] = relationship(back_populates="user", cascade="all, delete-orphan")
-
+    weight_log: Mapped[List["UserWeightLog"]] = relationship(back_populates="user", 
+                                                             cascade="all, delete-orphan",
+                                                             order_by="UserWeightLog.timestamp")
+    
     @property
     def daily_calorie_norm(self) -> float:
         if not self.activity_info:
