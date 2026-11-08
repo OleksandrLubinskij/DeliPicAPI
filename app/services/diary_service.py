@@ -9,5 +9,5 @@ class DiaryService(BaseCRUDService):
     def __init__(self, repo: DiaryRepository):
         super().__init__(repo)
 
-def get_user_service(repo: DiaryRepository = Depends(get_diary_repo)) -> DiaryService:
+def get_diary_service(repo: DiaryRepository = Depends(get_diary_repo)) -> DiaryService:
       return DiaryService(repo=repo)

@@ -9,5 +9,5 @@ class ProductService(BaseCRUDService):
     def __init__(self, repo: ProductRepository):
         super().__init__(repo)
 
-def get_user_service(repo: ProductRepository = Depends(get_product_repo)) -> ProductService:
+def get_product_service(repo: ProductRepository = Depends(get_product_repo)) -> ProductService:
       return ProductService(repo=repo)

@@ -9,5 +9,5 @@ class UserWeightLogService(BaseCRUDService):
     def __init__(self, repo: UserWeightLogRepository):
         super().__init__(repo)
 
-def get_user_service(repo: UserWeightLogRepository = Depends(get_user_weight_log_repo)) -> UserWeightLogService:
+def get_user_weight_service_service(repo: UserWeightLogRepository = Depends(get_user_weight_log_repo)) -> UserWeightLogService:
       return UserWeightLogService(repo=repo)

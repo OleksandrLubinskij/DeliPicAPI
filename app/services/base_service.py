@@ -11,8 +11,11 @@ class BaseCRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def __init__(self, repo: Any):
         self.repo = repo
 
-    async def fetch_all(self) -> list[ModelType]:
-        instance = await self.repo.get_all()
+    async def fetch_all(self,
+                        offset: int | None = None,
+                        limit: int | None = None) -> list[ModelType]:
+        instance = await self.repo.get_all(offset=offset,
+                                           limit=limit)
         return instance
     
     async def fetch_by_id(self, id:int, fields:list[str] | None = None) -> ModelType:
