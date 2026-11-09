@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from ..services.physical_activity_service import get_physical_activity_repo, PhysicalActivityService
+from ...services.physical_activity_service import get_physical_activity_repo, PhysicalActivityService
 router = APIRouter(
     prefix="/physical_activity",
     tags=["PhysicalActivity"]

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
-from ..services.user_weight_log_service import get_user_weight_service_service, UserWeightLogService
-from ..schemas.user_weight_log import UserWeightLogModel 
+from ...services.user_weight_log_service import get_user_weight_service_service, UserWeightLogService
+from ...schemas.user_weight_log import UserWeightLogModel 
 
 router = APIRouter(
     prefix="/user_weight_log",

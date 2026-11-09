@@ -6,7 +6,8 @@ from .database.connection import engine
 from .database.init_db import physical_activity_seeder
 from .core.exceptions import NotFoundError
 
-from .routers import diary, physical_activity, product, user_weight_log, user
+from .v1.routers import user_weight_log
+from .v1.routers import diary, physical_activity, product, user
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await physical_activity_seeder()
