@@ -46,6 +46,7 @@ class BaseRepo(Generic[Entity]):
     async def add(self, 
                   instance: Entity) -> Entity | None:
         self.db.add(instance)
+        await self.db.commit()
         await self.db.flush()
         await self.db.refresh(instance)
         return instance
@@ -59,7 +60,8 @@ class BaseRepo(Generic[Entity]):
 
         for key, value in new_data.items():
             setattr(instance, key, value)
-            
+
+        await self.db.commit()
         await self.db.flush()
         await self.db.refresh(instance)
         return instance
@@ -71,5 +73,6 @@ class BaseRepo(Generic[Entity]):
             return False
 
         await self.db.delete(instance)
+        await self.db.commit()
         await self.db.flush()
         return True

@@ -1,6 +1,6 @@
 from typing import Generic, Type, TypeVar, Any
 from pydantic import BaseModel
-from core.exceptions import NotFoundError
+from ..core.exceptions import NotFoundError
 
 ModelType = TypeVar("ModelType")
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel) 

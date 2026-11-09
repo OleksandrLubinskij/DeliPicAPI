@@ -1,11 +1,11 @@
 from fastapi import Depends
-from services.base_service import BaseCRUDService
-from database.models import Product
-from repository.product_repository import ProductRepository, get_product_repo
+from ..services.base_service import BaseCRUDService
+from ..database.models import Product
+from ..repository.product_repository import ProductRepository, get_product_repo
 
 
 class ProductService(BaseCRUDService):
-    repo: ProductRepository
+    model = Product
     def __init__(self, repo: ProductRepository):
         super().__init__(repo)
 

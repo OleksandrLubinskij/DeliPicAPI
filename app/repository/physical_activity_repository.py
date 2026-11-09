@@ -1,7 +1,7 @@
 from fastapi import Depends
-from database.models import PhysicalActivityInfo
-from database.connection import get_async_db
-from repository.base_repository import BaseRepo
+from ..database.models import PhysicalActivityInfo
+from ..database.connection import get_async_db
+from ..repository.base_repository import BaseRepo
 from sqlalchemy.ext.asyncio import AsyncSession
 
 class PhysicalActivityRepository(BaseRepo):   
