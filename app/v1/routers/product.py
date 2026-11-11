@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Form, File, UploadFile
+from typing import Annotated
 from ...services.product_service import get_product_service, ProductService
 from ...schemas.product import ProductModel, ProductUpdate 
 
@@ -30,10 +31,12 @@ async def read_record(id: int,
         return await diary_service.fetch_by_id(id=id)
 
 @router.post("/")
-async def create_record(diary_data: ProductModel,
+async def create_record(diary_data: Annotated[ProductModel, Form(...)],
+                        product_photo: Annotated[UploadFile, File(...)],
                         diary_service: ProductService = Depends(get_product_service)):
-    result = await diary_service.register(new_data=diary_data)
-    return result
+    return {"filename": product_photo.filename}
+    # result = await diary_service.register(new_data=diary_data)
+    # return result
 
 @router.patch("/{id}")
 async def update_record(id: int,

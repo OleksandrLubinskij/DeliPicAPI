@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from aiobotocore.session import get_session
-
+from ...core.config import s3_settings
 class S3Client:
     def __init__(self,
                  access_key: str,
@@ -44,3 +44,12 @@ class S3Client:
                 Bucket=self.bucket_name,
                 Key=object_name
             )
+
+async def get_s3():
+    s3 = S3Client(
+        access_key=s3_settings.s3_access_key.get_secret_value(),
+        secret_key=s3_settings.s3_secret_key.get_secret_value(),
+        endpoint_url=s3_settings.s3_endpoint_url,
+        bucket_name=s3_settings.s3_bucket_name
+    )
+    return s3

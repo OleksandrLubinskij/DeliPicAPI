@@ -8,8 +8,8 @@ class ProductModel(BaseModel):
     proteins: float
     carbohydrates: float
     fats: float
-    photo_path: str
-    photo_vector: List[float]
+    photo_path: str | None = None
+    photo_vector: List[float] | None = None
     is_accepted: bool
 
 class ProductUpdate(BaseModel):
