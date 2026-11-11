@@ -11,7 +11,6 @@ from .v1.routers import diary, physical_activity, product, user
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await physical_activity_seeder()
-
     try:
         yield
     finally:

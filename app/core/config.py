@@ -17,6 +17,15 @@ class DatabaseSettins(BaseSettings):
         url =  f"postgresql+asyncpg://{user}:{password}@{self.db_host}:{self.db_port}/{name}"
         return SecretStr(url)
     
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+class S3Settings(BaseSettings):
+    s3_bucket_name: str
+    s3_endpoint_url: str
+    s3_access_key: SecretStr
+    s3_secret_key: SecretStr
+    
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 db_settings = DatabaseSettins()
+s3_settings = S3Settings()
