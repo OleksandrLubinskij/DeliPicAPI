@@ -3,6 +3,7 @@ from typing import Annotated
 from ...services.product_service import get_product_service, ProductService
 from ...schemas.product import ProductModel, ProductUpdate 
 from ...services.storage.s3_client import get_s3, S3Client
+from ...services.ai.vision_service import get_vision_service, VisionService
 router = APIRouter(
     prefix="/product",
     tags=["Product"]
@@ -34,10 +35,13 @@ async def read_record(id: int,
 async def create_record(diary_data: Annotated[ProductModel, Form(...)],
                         product_photo: Annotated[UploadFile, File(...)],
                         diary_service: ProductService = Depends(get_product_service),
+                        vision_service: VisionService = Depends(get_vision_service),
                         s3: S3Client = Depends(get_s3)):
     await s3.upload_file(product_photo.file,
                    product_photo.filename)
-    return {"filename": product_photo.filename}
+    vision_response = await vision_service.define_product(product_photo=product_photo)
+    return {"filename": product_photo.filename,
+            "vision_responce": vision_response}
     # result = await diary_service.register(new_data=diary_data)
     # return result
 

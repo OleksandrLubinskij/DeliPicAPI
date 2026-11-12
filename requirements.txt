@@ -15,4 +15,4 @@ aiofiles
 Pillow
 asyncpg
 aiobotocore
-google
+google-genai
