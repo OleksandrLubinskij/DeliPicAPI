@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi.responses import JSONResponse
 from .database.connection import engine
 from .database.init_db import physical_activity_seeder
-from .core.exceptions import NotFoundError
+from .core.exceptions import NotFoundError, ServiceUnavailable
 
 from .v1.routers import user_weight_log
 from .v1.routers import diary, physical_activity, product, user
@@ -34,4 +34,13 @@ async def not_found(request: Request, exc: NotFoundError):
     return JSONResponse(
         status_code=status.HTTP_404_NOT_FOUND,
         content={"detail": "Not found!"}
+    )
+
+@app.exception_handler(ServiceUnavailable)
+async def service_unavailable(request: Request, exc: ServiceUnavailable):
+    return JSONResponse(
+        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        content={
+            "detail": exc.error_detail or "Service is temporarily unavailable"
+        },
     )

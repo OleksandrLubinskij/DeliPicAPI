@@ -4,3 +4,7 @@ class BaseError(Exception):
 
 class NotFoundError(BaseError):
     pass
+
+class ServiceUnavailable(BaseError):
+    def __init__(self, error_detail = None):
+        super().__init__(error_detail)
