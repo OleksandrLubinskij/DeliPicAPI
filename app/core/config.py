@@ -27,5 +27,11 @@ class S3Settings(BaseSettings):
     
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
+class GeminyAISettings(BaseSettings):
+    geminy_api_key: str
+
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    
 db_settings = DatabaseSettins()
 s3_settings = S3Settings()
+geminy_ai_settings = GeminyAISettings()

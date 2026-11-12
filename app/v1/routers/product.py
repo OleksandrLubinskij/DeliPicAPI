@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Form, File, UploadFile
 from typing import Annotated
 from ...services.product_service import get_product_service, ProductService
 from ...schemas.product import ProductModel, ProductUpdate 
-
+from ...services.storage.s3_client import get_s3, S3Client
 router = APIRouter(
     prefix="/product",
     tags=["Product"]
@@ -33,7 +33,10 @@ async def read_record(id: int,
 @router.post("/")
 async def create_record(diary_data: Annotated[ProductModel, Form(...)],
                         product_photo: Annotated[UploadFile, File(...)],
-                        diary_service: ProductService = Depends(get_product_service)):
+                        diary_service: ProductService = Depends(get_product_service),
+                        s3: S3Client = Depends(get_s3)):
+    await s3.upload_file(product_photo.file,
+                   product_photo.filename)
     return {"filename": product_photo.filename}
     # result = await diary_service.register(new_data=diary_data)
     # return result
