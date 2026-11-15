@@ -8,3 +8,11 @@ class NotFoundError(BaseError):
 class ServiceUnavailable(BaseError):
     def __init__(self, error_detail = None):
         super().__init__(error_detail)
+
+class InvalidPhoto(BaseError):
+    def __init__(self, error_detail = None):
+        super().__init__(error_detail)
+
+class RecognitionFailed(BaseError):
+    def __init__(self, error_detail = None):
+        super().__init__(error_detail)
