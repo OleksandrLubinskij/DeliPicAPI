@@ -40,8 +40,11 @@ async def create_record(diary_data: Annotated[ProductModel, Form(...)],
     await s3.upload_file(product_photo.file,
                    product_photo.filename)
     vision_response = await vision_service.define_product(product_photo=product_photo)
+    embedding = await vision_service.get_photo_embedding(product_photo=product_photo)
     return {"filename": product_photo.filename,
-            "vision_responce": vision_response}
+            "vision_responce": vision_response,
+            "embedding": embedding,
+            "embedding_len": len(embedding)}
     # result = await diary_service.register(new_data=diary_data)
     # return result
 
