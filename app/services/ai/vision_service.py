@@ -17,6 +17,7 @@ class VisionService:
         self.client = client
 
     async def define_product(self, product_photo: UploadFile) -> FoodInfo:
+        await product_photo.seek(0)
         product_photo_bytes = await product_photo.read()
         try:
             response = self.client.models.generate_content(
@@ -35,6 +36,7 @@ class VisionService:
             )
             return response.parsed
         except Exception as e:
+            print(f"Error |||  {e}")
             raise ServiceUnavailable("Geminy Vision service unavailable!")
 
 async def get_vision_service(client: genai.Client = Depends(get_ai)):
