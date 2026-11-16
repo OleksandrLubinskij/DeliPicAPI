@@ -1,6 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import load_only
-from typing import Generic, Type, TypeVar
+from typing import Generic, Type, TypeVar, Any, Sequence
 from sqlalchemy.ext.asyncio import AsyncSession
 
 Entity = TypeVar("Entity")
@@ -12,19 +12,25 @@ class BaseRepo(Generic[Entity]):
 
     async def get_all(self, 
                     offset: int | None = None,
-                    limit: int | None = None) -> list[Entity]:
+                    limit: int | None = None,
+                    options: Sequence[Any] = ()) -> list[Entity]:
         stmt = select(
             self.entity
             ).offset(
                 offset
             ).limit(
                 limit)
+        
+        if options:
+            stmt = stmt.options(*options)
+
         result = (await self.db.execute(stmt)).scalars().all()
         return result
     
     async def get_by_id(self, 
                         id: int,
-                        fields: list[str] | None = None) -> Entity:
+                        fields: list[str] | None = None,
+                        options: Sequence[Any] = ()) -> Entity:
         stmt = select(
             self.entity
         ).where(
@@ -39,8 +45,10 @@ class BaseRepo(Generic[Entity]):
 
             stmt = stmt.options(load_only(*selected_fields))
 
-        result = (await self.db.execute(stmt)).scalar()
+        if options:
+            stmt = stmt.options(*options)
 
+        result = (await self.db.execute(stmt)).scalar()
         return result
 
     async def add(self, 
