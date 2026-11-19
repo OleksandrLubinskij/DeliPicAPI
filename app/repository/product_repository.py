@@ -16,11 +16,12 @@ class ProductRepository(BaseRepo):
         embedding: List[float], 
         max_distance: float = 0.25 
     ) -> Optional[Product]:
-        distance = Product.embedding.cosine_distance(embedding)
+        
+        distance = Product.photo_vector.cosine_distance(embedding)
         
         stmt = (
             select(Product)
-            .where(Product.embedding.is_not(None))
+            .where(Product.photo_vector.is_not(None))
             .where(distance <= max_distance)
             .order_by(distance)
             .limit(1)

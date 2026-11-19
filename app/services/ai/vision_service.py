@@ -36,7 +36,8 @@ class VisionService:
 
         try:
             response = await self.client.aio.models.generate_content(
-                model="gemini-3.6-flash",
+                # model="gemini-3.6-flash",
+                model="gemma-4-31b-it",
                 contents=[
                     "Визнач продукт на фотографії та вкажи його орієнтовну калорійність, а також кількість білків, вуглеводів і жирів на 100 грамів.",
                     types.Part.from_bytes(

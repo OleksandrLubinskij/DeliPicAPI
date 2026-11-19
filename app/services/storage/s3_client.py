@@ -6,7 +6,8 @@ class S3Client:
                  access_key: str,
                  secret_key: str,
                  endpoint_url: str,
-                 bucket_name: str
+                 bucket_name: str,
+                 public_url: str
                  ):
     
         self.config = {
@@ -16,6 +17,7 @@ class S3Client:
             "region_name": "auto"
         }
         self.bucket_name = bucket_name
+        self.public_url = public_url
         self.session = get_session()
 
     @asynccontextmanager
@@ -27,7 +29,7 @@ class S3Client:
             self, 
             file_data: bytes, 
             object_name: str,
-            content_type: str = "application/octet-stream"
+            content_type: str = "image/jpeg"
     ):
         
         async with self.get_client() as client:
@@ -45,11 +47,15 @@ class S3Client:
                 Key=object_name
             )
 
+    async def get_public_url(self):
+        return self.public_url
+    
 async def get_s3():
     s3 = S3Client(
         access_key=s3_settings.s3_access_key.get_secret_value(),
         secret_key=s3_settings.s3_secret_key.get_secret_value(),
         endpoint_url=s3_settings.s3_endpoint_url,
-        bucket_name=s3_settings.s3_bucket_name
+        bucket_name=s3_settings.s3_bucket_name,
+        public_url=s3_settings.s3_public_url
     )
     return s3
