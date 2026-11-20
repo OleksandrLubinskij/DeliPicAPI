@@ -5,7 +5,7 @@ from ...services.diary_service import DiaryService, get_diary_service
 from ...services.storage.s3_client import S3Client, get_s3
 from ...schemas.product import ProductNutritionResponse
 from ...services.product_lookup import recognize_or_create_product
-from ...core.dependencies import CurrentUserId, get_current_user_id
+from ...core.dependencies import CurrentUserId
 router = APIRouter(
     prefix="/scales",
     tags=["Scales"]
@@ -21,8 +21,8 @@ async def identify_product(
     file: UploadFile = File(...),
     product_service: ProductService = Depends(get_product_service),
     vision_service: VisionService = Depends(get_vision_service),
-    s3: S3Client = Depends(get_s3)):
-    # ) -> ProductNutritionResponse:
+    s3: S3Client = Depends(get_s3)
+    ) -> ProductNutritionResponse:
 
     return await recognize_or_create_product(file=file,
                                              product_service=product_service,

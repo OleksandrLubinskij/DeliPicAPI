@@ -17,8 +17,7 @@ async def recognize_or_create_product(
     photo_embedding = await vision_service.get_photo_embedding(product_photo=file)
     product = await product_service.fetch_by_embedding(embedding=photo_embedding)
     if product:
-        return {"From": "From db",
-                "Info": product}
+        return product
     else:
         await file.seek(0)
         vision_response = await vision_service.define_product(product_photo=file)
@@ -40,5 +39,4 @@ async def recognize_or_create_product(
         
         await product_service.register(new_data=new_product)
                                    
-        return {"From": "From AI",
-                "Info": new_product}
+        return new_product
