@@ -4,7 +4,7 @@ from ...services.ai.vision_service import VisionService, get_vision_service
 from ...services.diary_service import DiaryService, get_diary_service
 from ...services.storage.s3_client import S3Client, get_s3
 from ...schemas.product import ProductNutritionResponse
-from ...schemas.diary import SaveToDiaryRequest
+from ...schemas.diary import SaveToDiaryRequest, DiaryModel
 from ...services.product_lookup import recognize_or_create_product
 from ...core.dependencies import CurrentUserId
 router = APIRouter(
@@ -38,4 +38,15 @@ async def save_to_diary(
     payload: SaveToDiaryRequest,
     diary_service: DiaryService = Depends(get_diary_service)
 ):
-    pass
+    new_diary_record = DiaryModel(
+        user_id=current_user,
+        product_name_snapshot=payload.product_name,
+        product_id=payload.product_id,
+        weight=payload.weight,
+        calories_consumed=payload.calories,
+        proteins_consumed=payload.proteins,
+        carbohydrates_consumed=payload.carbohydrates,
+        fats_consumed=payload.fats
+    )
+    await diary_service.register(new_data=new_diary_record)
+    return {"message": "Запис успішно збережено"}
