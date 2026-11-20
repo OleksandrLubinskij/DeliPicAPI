@@ -14,7 +14,7 @@ class ProductRepository(BaseRepo):
     async def get_by_embedding(
         self, 
         embedding: List[float], 
-        max_distance: float = 0.25 
+        max_distance: float = 0.12 
     ) -> Optional[Product]:
         
         distance = Product.photo_vector.cosine_distance(embedding)
