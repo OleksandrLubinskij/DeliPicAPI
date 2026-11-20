@@ -33,29 +33,32 @@ class VisionService:
     
     async def define_product(self, product_photo: UploadFile) -> FoodInfo:
         photo_bytes, mime_type = await self.read_photo_bytes(product_photo)
+        models = ("gemini-3.1-flash-lite", "gemma-4-31b-it", "gemini-3.5-flash-lite")
+        for model in models:
+            try:
+                response = await self.client.aio.models.generate_content(
+                    model=model,
+                    contents=[
+                        "Визнач продукт на фотографії та вкажи його орієнтовну калорійність, а також кількість білків, вуглеводів і жирів на 100 грамів.",
+                        types.Part.from_bytes(
+                            data=photo_bytes,
+                            mime_type=mime_type
+                        )
+                    ],
+                    config=types.GenerateContentConfig(
+                        response_mime_type="application/json",
+                        response_schema=FoodInfo,
+                    ),
+                )
+                if not response.parsed:
+                    raise RecognitionFailed("Failed to parse product info from the photo")
 
-        try:
-            response = await self.client.aio.models.generate_content(
-                model="gemini-3.6-flash",
-                contents=[
-                    "Визнач продукт на фотографії та вкажи його орієнтовну калорійність, а також кількість білків, вуглеводів і жирів на 100 грамів.",
-                    types.Part.from_bytes(
-                        data=photo_bytes,
-                        mime_type=mime_type
-                    )
-                ],
-                config=types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                    response_schema=FoodInfo,
-                ),
-            )
-            if not response.parsed:
-                raise RecognitionFailed("Failed to parse product info from the photo")
-            
-            return response.parsed
-        except APIError as e:
-            print(f"Error |||  {e}")
-            raise ServiceUnavailable("Geminy Vision service unavailable!(define product)")
+                print(f"It works - {model}")
+                return response.parsed
+            except APIError as e:
+                print(f"Error |||  {e}")
+                continue
+        raise ServiceUnavailable("Geminy Vision service unavailable!(define product)")
 
     async def get_photo_embedding(self, product_photo: UploadFile) -> List[float]:
         photo_bytes, mime_type = await self.read_photo_bytes(product_photo)

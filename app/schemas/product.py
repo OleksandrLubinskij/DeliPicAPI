@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
 
 class ProductModel(BaseModel):
@@ -20,3 +20,13 @@ class ProductUpdate(BaseModel):
     fats: Optional[float] = None
     photo_path: Optional[str] = None
     photo_vector: Optional[List[float]] = None
+
+class ProductNutritionResponse(BaseModel):
+    id: int
+    title: str
+    calories: float
+    proteins: float
+    carbohydrates: float
+    fats: float
+
+    model_config = ConfigDict(from_attributes=True)

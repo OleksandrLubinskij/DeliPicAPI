@@ -7,7 +7,7 @@ from .database.init_db import physical_activity_seeder
 from .core.exceptions import BaseError
 
 from .v1.routers import user_weight_log
-from .v1.routers import diary, physical_activity, product, user
+from .v1.routers import diary, physical_activity, product, user, scales
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await physical_activity_seeder()
@@ -23,6 +23,7 @@ app.include_router(product.router)
 app.include_router(diary.router)
 app.include_router(user_weight_log.router)
 app.include_router(physical_activity.router)
+app.include_router(scales.router)
 
 @app.get("/")
 async def gingerbread():
