@@ -32,7 +32,6 @@ async def recognize_or_create_product(
         await s3.upload_file(file_data=photo_bytes,
                              object_name=unique_filename)
         s3_public_url = await s3.get_public_url()
-
         new_product = ProductModel(user_id=current_user,
                                 name=vision_response.product_name,
                                 calories=vision_response.calories_per_100g,
@@ -43,6 +42,6 @@ async def recognize_or_create_product(
                                 photo_vector=photo_embedding,
                                 is_accepted=False)
         
-        await product_service.register(new_data=new_product)
+        new_product_instance = await product_service.register(new_data=new_product)
                                    
-        return new_product
+        return new_product_instance
