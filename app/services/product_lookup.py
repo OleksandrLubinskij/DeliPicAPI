@@ -34,7 +34,7 @@ async def recognize_or_create_product(
         s3_public_url = await s3.get_public_url()
 
         new_product = ProductModel(user_id=current_user,
-                                title=vision_response.product_name,
+                                name=vision_response.product_name,
                                 calories=vision_response.calories_per_100g,
                                 proteins=vision_response.proteins_per_100g,
                                 carbohydrates=vision_response.carbohydrates_per_100g,
