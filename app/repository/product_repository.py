@@ -1,7 +1,6 @@
 from typing import List, Optional
 
 from fastapi import Depends
-from typing import Any, Sequence
 from sqlalchemy import select
 from ..database.models import Product
 from ..database.connection import get_async_db
@@ -39,21 +38,37 @@ class ProductRepository(BaseRepo):
     
     async def get_by_embedding(
         self, 
+        user_id: int,
         embedding: List[float], 
         max_distance: float = 0.12 
     ) -> Optional[Product]:
         
         distance = Product.photo_vector.cosine_distance(embedding)
-        
-        stmt = (
+
+        user_stmt = (
             select(Product)
             .where(Product.photo_vector.is_not(None))
             .where(distance <= max_distance)
+            .where(Product.user_id == user_id)
             .order_by(distance)
             .limit(1)
         )
-        result = await self.db.execute(stmt)
-        return result.scalar_one_or_none()
+
+        product = (await self.db.execute(user_stmt)).scalar_one_or_none()
+        if product:
+            return product
+
+        global_stmt = (
+            select(Product)
+            .where(Product.photo_vector.is_not(None))
+            .where(distance <= max_distance)
+            .where(Product.user_id != user_id)
+            .where(Product.is_accepted.is_(True))
+            .order_by(distance)
+            .limit(1)
+        )
+        return (await self.db.execute(global_stmt)).scalar_one_or_none()
+        
         
 def get_product_repo(db: AsyncSession = Depends(get_async_db)) -> ProductRepository:
     return ProductRepository(db=db)
