@@ -46,7 +46,8 @@ async def save_to_diary(
         calories_consumed=payload.calories,
         proteins_consumed=payload.proteins,
         carbohydrates_consumed=payload.carbohydrates,
-        fats_consumed=payload.fats
+        fats_consumed=payload.fats,
+        meal_type=payload.meal_type
     )
     await diary_service.register(new_data=new_diary_record)
     return {"message": "Запис успішно збережено"}
