@@ -15,7 +15,9 @@ class ProductRepository(BaseRepo):
 
     async def get_all(self, 
                       offset: int | None = None,
-                      limit: int | None = None,) -> list[Product]:
+                      limit: int | None = None
+                      ) -> list[Product]:
+        
         options = (defer(Product.photo_vector),)
 
         return await super().get_all(offset=offset,

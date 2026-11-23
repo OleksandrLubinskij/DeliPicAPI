@@ -10,6 +10,7 @@ from ..schemas.product import ProductModel, ProductUpdate
 
 class ProductService(BaseCRUDService[Product, ProductModel, ProductUpdate]):
     model = Product
+    repo: ProductRepository
     def __init__(self, repo: ProductRepository):
         super().__init__(repo)
         
