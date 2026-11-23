@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request
 from contextlib import asynccontextmanager
 
 from fastapi.responses import JSONResponse
@@ -8,6 +8,8 @@ from .core.exceptions import BaseError
 
 from .v1.routers import user_weight_log
 from .v1.routers import diary, physical_activity, product, user, scales
+from fastapi.middleware.cors import CORSMiddleware
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await physical_activity_seeder()
@@ -17,6 +19,16 @@ async def lifespan(app: FastAPI):
         await engine.dispose()
 
 app = FastAPI(lifespan=lifespan)
+
+origins = []
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(user.router)
 app.include_router(product.router)
