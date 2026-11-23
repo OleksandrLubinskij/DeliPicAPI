@@ -66,7 +66,7 @@ class Product(Base):
     __tablename__ = "product"
 
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=True, index=True)
-    title: Mapped[str] = mapped_column(String(150), nullable=False)
+    name: Mapped[str] = mapped_column(String(150), nullable=False)
     calories: Mapped[float] = mapped_column(Float, nullable=False)
     proteins: Mapped[float] = mapped_column(Float, nullable=False)
     carbohydrates: Mapped[float] = mapped_column(Float, nullable=False)
