@@ -13,7 +13,8 @@ class BaseRepo(Generic[Entity]):
     async def get_all(self, 
                     offset: int | None = None,
                     limit: int | None = None,
-                    options: Sequence[Any] = ()) -> list[Entity]:
+                    options: Sequence[Any] = (),
+                    filters: Sequence[Any] = ()) -> list[Entity]:
         stmt = select(
             self.entity
             ).offset(
@@ -24,6 +25,9 @@ class BaseRepo(Generic[Entity]):
         if options:
             stmt = stmt.options(*options)
 
+        if filters:
+            stmt = stmt.where(*filters)
+            
         result = (await self.db.execute(stmt)).scalars().all()
         return result
     
