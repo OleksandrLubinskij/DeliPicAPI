@@ -3,7 +3,7 @@ from typing import Optional, List
 
 class ProductModel(BaseModel):
     user_id: int
-    title: str
+    name: str
     calories: float
     proteins: float
     carbohydrates: float
@@ -13,7 +13,7 @@ class ProductModel(BaseModel):
     is_accepted: bool
 
 class ProductUpdate(BaseModel):
-    title: Optional[str] = None
+    name: Optional[str] = None
     calories: Optional[float] = None
     proteins: Optional[float] = None
     carbohydrates: Optional[float] = None
@@ -23,7 +23,7 @@ class ProductUpdate(BaseModel):
 
 class ProductNutritionResponse(BaseModel):
     id: int
-    title: str
+    name: str
     calories: float
     proteins: float
     carbohydrates: float
