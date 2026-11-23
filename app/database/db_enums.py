@@ -7,3 +7,9 @@ class UserGender(enum.Enum):
 class UserRole(enum.Enum):
     Admin = "Admin"
     User = "User"
+
+class MealType(str, enum.Enum):
+    BREAKFAST = "breakfast"
+    LUNCH = "lunch"
+    DINNER = "dinner"
+    SNACK = "snack"

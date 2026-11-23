@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy import Float, Index, String, Integer, DateTime, ForeignKey, func, Enum
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from pgvector.sqlalchemy import Vector
-from .db_enums import UserGender, UserRole
+from .db_enums import UserGender, UserRole, MealType
 
 class Base(DeclarativeBase):
     __abstract__ = True
@@ -75,6 +75,7 @@ class Product(Base):
     photo_vector: Mapped[list[float]] = mapped_column(Vector(dim=512))
     is_accepted: Mapped[bool] = mapped_column(default=False, server_default="false", nullable=False)
 
+
     user: Mapped["User"] = relationship(back_populates="products")
     diary_entries: Mapped[List["Diary"]] = relationship(back_populates="product")
 
@@ -101,6 +102,7 @@ class Diary(Base):
     proteins_consumed: Mapped[float] = mapped_column(Float, nullable=False)
     carbohydrates_consumed: Mapped[float] = mapped_column(Float, nullable=False)
     fats_consumed: Mapped[float] = mapped_column(Float, nullable=False)
+    meal_type: Mapped[MealType] = mapped_column(Enum(MealType))
     
     timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     
