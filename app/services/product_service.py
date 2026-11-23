@@ -41,8 +41,11 @@ class ProductService(BaseCRUDService[Product, ProductModel, ProductUpdate]):
         return instance
 
     async def fetch_by_embedding(self,
+                                 user_id: int,
                                  embedding: List[None]) -> Optional[Product]:
-        instance = await self.repo.get_by_embedding(embedding=embedding)
+        instance = await self.repo.get_by_embedding(
+            user_id=user_id,
+            embedding=embedding)
         return instance
     
 def get_product_service(repo: ProductRepository = Depends(get_product_repo)) -> ProductService:

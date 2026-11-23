@@ -17,7 +17,9 @@ async def recognize_or_create_product(
 
     await file.seek(0)
     photo_embedding = await vision_service.get_photo_embedding(product_photo=file)
-    product = await product_service.fetch_by_embedding(embedding=photo_embedding)
+    product = await product_service.fetch_by_embedding(
+        user_id=current_user,
+        embedding=photo_embedding)
     if product:
         return product
     else:
