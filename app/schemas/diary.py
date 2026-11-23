@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
+from ..database.db_enums import MealType
 
 class DiaryModel(BaseModel):
     user_id: int
@@ -10,10 +11,12 @@ class DiaryModel(BaseModel):
     proteins_consumed: float
     carbohydrates_consumed: float
     fats_consumed: float
+    meal_type: MealType
 
 class DiaryUpdate(BaseModel):
     product_id: Optional[int] = None
     weight: Optional[float] = None
+    meal_type: Optional[MealType] = None
 
 class SaveToDiaryRequest(BaseModel):
     product_id: int
@@ -23,3 +26,4 @@ class SaveToDiaryRequest(BaseModel):
     proteins: float
     carbohydrates: float
     fats: float
+    meal_type: MealType
