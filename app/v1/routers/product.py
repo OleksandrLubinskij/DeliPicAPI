@@ -16,9 +16,11 @@ async def product_teapot():
 @router.get("/")
 async def read_all_records(limit: int = 10,
                 offset: int = 0,
+                is_accept_state: bool | None = None,
                 diary_service: ProductService = Depends(get_product_service)):
     return await diary_service.fetch_all(offset=offset,
-                                         limit=limit)
+                                         limit=limit,
+                                         is_accept_state=is_accept_state)
 
 @router.get("/{id}")
 async def read_record(id: int,
@@ -35,21 +37,12 @@ async def read_record(id: int,
                                                include_embedding=include_embedding)
 
 @router.post("/")
-async def create_record(diary_data: Annotated[ProductModel, Form(...)],
-                        product_photo: Annotated[UploadFile, File(...)],
-                        diary_service: ProductService = Depends(get_product_service),
-                        vision_service: VisionService = Depends(get_vision_service),
-                        s3: S3Client = Depends(get_s3)):
-    await s3.upload_file(product_photo.file,
-                   product_photo.filename)
-    vision_response = await vision_service.define_product(product_photo=product_photo)
-    embedding = await vision_service.get_photo_embedding(product_photo=product_photo)
-    return {"filename": product_photo.filename,
-            "vision_responce": vision_response,
-            "embedding": embedding,
-            "embedding_len": len(embedding)}
-    # result = await diary_service.register(new_data=diary_data)
-    # return result
+async def create_record(
+    diary_data: Annotated[ProductModel, Form(...)],
+    diary_service: ProductService = Depends(get_product_service),
+):
+    result = await diary_service.register(new_data=diary_data)
+    return result
 
 @router.patch("/{id}")
 async def update_record(id: int,

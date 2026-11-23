@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends
 from ...services.diary_service import get_diary_service, DiaryService
 from ...schemas.diary import DiaryModel, DiaryUpdate 
+from ...core.dependencies import CurrentUserId
+from datetime import date 
 
 router = APIRouter(
     prefix="/diary",
@@ -17,6 +19,17 @@ async def read_all_records(limit: int = 10,
                 diary_service: DiaryService = Depends(get_diary_service)):
     return await diary_service.fetch_all(offset=offset,
                                          limit=limit)
+
+@router.get("/{date}")
+async def read_all_records_by_date(
+    current_user: CurrentUserId,
+    target_date: date,
+    diary_service:DiaryService = Depends(get_diary_service)
+):
+    return await diary_service.fetch_all_by_date(
+        user_id=current_user,
+        target_date=target_date
+    )
 
 @router.get("/{id}")
 async def read_record(id: int,

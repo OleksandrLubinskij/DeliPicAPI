@@ -19,7 +19,7 @@ class ProductUpdate(BaseModel):
     carbohydrates: Optional[float] = None
     fats: Optional[float] = None
     photo_path: Optional[str] = None
-    photo_vector: Optional[List[float]] = None
+    is_accepted: Optional[bool] = None
 
 class ProductNutritionResponse(BaseModel):
     id: int

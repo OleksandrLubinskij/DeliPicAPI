@@ -13,7 +13,19 @@ class ProductService(BaseCRUDService[Product, ProductModel, ProductUpdate]):
     repo: ProductRepository
     def __init__(self, repo: ProductRepository):
         super().__init__(repo)
+
+    async def fetch_all(
+            self, 
+            offset: int | None = None, 
+            limit: int | None = None,
+            is_accept_state: bool | None = None):
         
+        return await self.repo.get_all(
+            offset=offset,
+            limit=limit,
+            is_accept_state=is_accept_state
+        )
+    
     async def fetch_by_id(
         self, 
         id: int, 

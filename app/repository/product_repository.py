@@ -15,14 +15,17 @@ class ProductRepository(BaseRepo):
 
     async def get_all(self, 
                       offset: int | None = None,
-                      limit: int | None = None
+                      limit: int | None = None,
+                      is_accept_state: bool | None = None
                       ) -> list[Product]:
         
         options = (defer(Product.photo_vector),)
-
+        filters = [Product.is_accepted == is_accept_state]
+        
         return await super().get_all(offset=offset,
                                     limit=limit,
-                                    options=options)
+                                    options=options,
+                                    filters=filters)
     
     async def get_by_id(self, 
                         id: int,
