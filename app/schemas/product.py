@@ -30,3 +30,14 @@ class ProductNutritionResponse(BaseModel):
     fats: float
 
     model_config = ConfigDict(from_attributes=True)
+
+class FullProductResponse(BaseModel):
+    id: int
+    name: str
+    calories: float
+    proteins: float
+    carbohydrates: float
+    fats: float
+    user_id: int
+    photo_path: str
+    is_accepted: bool

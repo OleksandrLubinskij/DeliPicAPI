@@ -35,8 +35,10 @@ class BaseCRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         result = await self.repo.update(id, data)
         if result is None:
             raise NotFoundError()
+        return result
         
     async def remove(self, id:int) -> bool:
         result = await self.repo.delete(id)
         if not result:
             raise NotFoundError()
+        return result
