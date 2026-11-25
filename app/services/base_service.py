@@ -10,7 +10,7 @@ class BaseCRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     model: Type[ModelType]
     def __init__(self, repo: Any):
         self.repo = repo
-
+ 
     async def fetch_all(self,
                         offset: int | None = None,
                         limit: int | None = None) -> list[ModelType]:

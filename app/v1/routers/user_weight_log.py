@@ -1,6 +1,9 @@
+from datetime import date
+from typing import List
 from fastapi import APIRouter, Depends
 from ...services.user_weight_log_service import get_user_weight_service_service, UserWeightLogService
-from ...schemas.user_weight_log import UserWeightLogModel 
+from ...schemas.user_weight_log import UserWeightLogModel, FullUserWeightResponce
+from ...core.dependencies import CurrentUserId
 
 router = APIRouter(
     prefix="/user_weight_log",
@@ -12,26 +15,31 @@ async def user_weight_log_teapot():
     return {"messsage": "UserWeightLog is teapot!"}
 
 @router.get("/")
-async def read_all_records(limit: int = 10,
-                offset: int = 0,
-                diary_service: UserWeightLogService = Depends(get_user_weight_service_service)):
-    return await diary_service.fetch_all(offset=offset,
-                                         limit=limit)
+async def read_user_records_by_period(
+    user_id: CurrentUserId,
+    start_period: date,
+    end_period: date,
+    user_weight_log_service: UserWeightLogService = Depends(get_user_weight_service_service)
+) -> List[FullUserWeightResponce]:
+    return await user_weight_log_service.fetch_by_user_and_id(
+        user_id=user_id,
+        start_period=start_period,
+        end_period=end_period
+    )
 
 @router.get("/{id}")
-async def read_record(id: int,
-                  fields: str | None = None,
-                  diary_service: UserWeightLogService = Depends(get_user_weight_service_service)):
-    if fields:
-        fields = fields.split(",")
-        return await diary_service.fetch_by_id(id=id,
-                                           fields=fields)
-    else:
-        return await diary_service.fetch_by_id(id=id)
+async def read_record(
+    id: int,
+    user_weight_log_service: UserWeightLogService = Depends(get_user_weight_service_service)
+) -> FullUserWeightResponce:
+        
+    return await user_weight_log_service.fetch_by_id(id=id)
 
 @router.post("/")
-async def create_record(diary_data: UserWeightLogModel,
-                        diary_service: UserWeightLogService = Depends(get_user_weight_service_service)):
-    result = await diary_service.register(new_data=diary_data)
+async def create_record(
+    user_weight_data: UserWeightLogModel,
+    user_weight_log_service: UserWeightLogService = Depends(get_user_weight_service_service)
+) -> FullUserWeightResponce:
+    result = await user_weight_log_service.register(new_data=user_weight_data)
     return result
 

@@ -7,7 +7,7 @@ from datetime import date
 from ..schemas.diary import DiaryModel, DiaryUpdate
 
 class DiaryService(BaseCRUDService[Diary, DiaryModel, DiaryUpdate]):
-    model = Diary
+    model = Diary 
     repo: DiaryRepository
     def __init__(self, repo: DiaryRepository):
         super().__init__(repo)
