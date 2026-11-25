@@ -28,17 +28,10 @@ async def read_all_records(
 @router.get("/{id}")
 async def read_record(
     id: int,
-    fields: str | None = None,
     include_embedding: bool = False,
     diary_service: ProductService = Depends(get_product_service)
 ) -> FullProductResponse:
     
-    if fields:
-        fields = fields.split(",")
-        return await diary_service.fetch_by_id(id=id,
-                                           fields=fields,
-                                           include_embedding=include_embedding)
-    else:
         return await diary_service.fetch_by_id(id=id,
                                                include_embedding=include_embedding)
 
