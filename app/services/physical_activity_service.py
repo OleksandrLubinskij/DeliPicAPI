@@ -9,5 +9,5 @@ class PhysicalActivityService(BaseCRUDService):
     def __init__(self, repo: PhysicalActivityRepository):
         super().__init__(repo)
 
-def get_user_service(repo: PhysicalActivityRepository = Depends(get_physical_activity_repo)) -> PhysicalActivityService:
+def get_physical_activity_service(repo: PhysicalActivityRepository = Depends(get_physical_activity_repo)) -> PhysicalActivityService:
       return PhysicalActivityService(repo=repo)
