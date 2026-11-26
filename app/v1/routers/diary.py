@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import List
 
 from fastapi import APIRouter, Depends
 from ...services.diary_service import get_diary_service, DiaryService
@@ -6,10 +6,12 @@ from ...schemas.diary import DiaryModel, DiaryUpdate, FullDiaryResponse
 from ...schemas.base_response import StatusResonse
 from ...core.dependencies import CurrentUserId
 from datetime import date 
+from ...services.auth_sevice import get_current_user
 
 router = APIRouter(
     prefix="/diary",
-    tags=["Diary"]
+    tags=["Diary"],
+    dependencies=[Depends(get_current_user)]
 )
 
 @router.get("/teapot")

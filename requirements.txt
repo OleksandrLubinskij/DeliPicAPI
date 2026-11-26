@@ -16,3 +16,4 @@ Pillow
 asyncpg
 aiobotocore
 google-genai
+pydantic[email]

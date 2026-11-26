@@ -19,7 +19,7 @@ class UserService(BaseCRUDService):
         new_user = User(
             **new_data.model_dump(exclude={"password"}),
             hashed_password=hashed_password,
-            role=UserRole.USER
+            role=UserRole.User
         )
         created_user = await self.repo.add(new_user)
         return UserOut.model_validate(created_user)

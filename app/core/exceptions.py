@@ -25,3 +25,15 @@ class InvalidPhoto(BaseError):
 class RecognitionFailed(BaseError):
     status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
     default_detail = "Failed to recognize content"
+
+class AuthenticationFailed(BaseError):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    default_detail = "Incorrect login or password"
+
+class UserAlreadyExists(BaseError):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "User already exists"
+
+class InvalidCredentials(BaseError):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    default_detail = "Invalid or expired token"
