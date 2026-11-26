@@ -32,7 +32,8 @@ class User(Base):
 
     role: Mapped[UserRole] = mapped_column(Enum(UserRole))
     login: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(String(255), nullable=False)
+    email: Mapped[str] = mapped_column(String(80), unique=True, nullable=True)
+    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
     gender: Mapped[UserGender] = mapped_column(Enum(UserGender))    
     weight: Mapped[float] = mapped_column(Float, nullable=False)
     height:  Mapped[float] = mapped_column(Float, nullable=False)
