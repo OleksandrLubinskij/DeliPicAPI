@@ -68,7 +68,7 @@ async def get_current_user(
     return UserOut.model_validate(user)
 
 async def get_admin_user(current_user: UserOut = Depends(get_current_user)):
-    if current_user.role != UserRole.Admin.value:
+    if current_user.role.value != UserRole.Admin.value:
         raise YouAreOrdinaryMortal()
     return current_user
 

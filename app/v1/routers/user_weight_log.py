@@ -4,10 +4,12 @@ from fastapi import APIRouter, Depends
 from ...services.user_weight_log_service import get_user_weight_service_service, UserWeightLogService
 from ...schemas.user_weight_log import UserWeightLogModel, FullUserWeightResponce
 from ...core.dependencies import CurrentUserId
+from ...services.auth_sevice import get_current_user
 
 router = APIRouter(
     prefix="/user_weight_log",
-    tags=["UserWeightLog"]
+    tags=["UserWeightLog"],
+    dependencies=[Depends(get_current_user)]
 )
 
 @router.get("/teapot")

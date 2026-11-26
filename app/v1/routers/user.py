@@ -1,12 +1,12 @@
 from typing import List
 from fastapi import APIRouter, Depends, Response
-from ...core.security import create_access_token
 from ...services.user_service import get_user_service, UserService
 from ...services.auth_sevice import AuthService, get_auth_service
 from ...schemas.user import UserCreate, UserUpdate, UserOut, UserLogin
 from ...schemas.base_response import StatusResonse
-from ...schemas.token import Token
-from ...core.exceptions import AuthenticationFailed
+from ...services.auth_sevice import get_admin_user
+
+
 router = APIRouter(
     prefix="/user",
     tags=["User"]
@@ -20,7 +20,8 @@ async def user_teapot():
 async def read_all_records(
     limit: int = 10,
     offset: int = 0,
-    user_service: UserService = Depends(get_user_service)
+    user_service: UserService = Depends(get_user_service),
+    current_user: UserOut = Depends(get_admin_user)
 ) -> List[UserOut]:
     return await user_service.fetch_all(offset=offset,
                                          limit=limit)
@@ -28,7 +29,8 @@ async def read_all_records(
 @router.get("/{id}")
 async def read_record(
     id: int,
-    user_service: UserService = Depends(get_user_service)
+    user_service: UserService = Depends(get_user_service),
+    current_user: UserOut = Depends(get_admin_user)
 ) -> UserOut | None:
         
         return await user_service.fetch_by_id(id=id)
@@ -60,7 +62,8 @@ async def logout(
 async def update_record(
     id: int,
     diary_new_data: UserUpdate,
-    user_service: UserService = Depends(get_user_service)
+    user_service: UserService = Depends(get_user_service),
+    current_user: UserOut = Depends(get_admin_user)
 ) -> UserOut:
     result = await user_service.update(id=id,
                                         new_data=diary_new_data)
@@ -69,7 +72,8 @@ async def update_record(
 @router.delete("/{id}")
 async def delete_record(
     id: int,
-    user_service: UserService = Depends(get_user_service)
+    user_service: UserService = Depends(get_user_service),
+    current_user: UserOut = Depends(get_admin_user)
 ) -> StatusResonse:
     await user_service.remove(id=id)
     return StatusResonse(id=id)

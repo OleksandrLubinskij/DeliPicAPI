@@ -4,9 +4,12 @@ from ...services.product_service import get_product_service, ProductService
 from ...schemas.product import ProductModel, ProductUpdate, FullProductResponse
 from ...services.storage.s3_client import get_s3, S3Client
 from ...services.ai.vision_service import get_vision_service, VisionService
+from ...services.auth_sevice import get_current_user
+
 router = APIRouter(
     prefix="/product",
-    tags=["Product"]
+    tags=["Product"],
+    dependencies=[Depends(get_current_user)]
 )
 
 @router.get("/teapot")

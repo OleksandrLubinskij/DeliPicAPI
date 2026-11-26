@@ -3,10 +3,12 @@ from typing import List
 from fastapi import APIRouter, Depends
 from ...services.physical_activity_service import get_physical_activity_service, PhysicalActivityService
 from ...schemas.physical_activity import FullPhysicalActivityResponce
+from ...services.auth_sevice import get_current_user
 
 router = APIRouter(
     prefix="/physical_activity",
-    tags=["PhysicalActivity"]
+    tags=["PhysicalActivity"],
+    dependencies=[Depends(get_current_user)]
 )
 
 @router.get("/teapot")

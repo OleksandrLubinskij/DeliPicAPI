@@ -39,5 +39,5 @@ class InvalidCredentials(BaseError):
     default_detail = "Invalid or expired token"
 
 class YouAreOrdinaryMortal(BaseError):
-    status_code = status.HTTP_403_FORBIDDEN,
+    status_code = status.HTTP_403_FORBIDDEN
     default_detail = "You are an ordinary mortal. Admin rights required."

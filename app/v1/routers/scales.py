@@ -7,9 +7,12 @@ from ...schemas.product import ProductNutritionResponse
 from ...schemas.diary import SaveToDiaryRequest, DiaryModel
 from ...services.product_lookup import recognize_or_create_product
 from ...core.dependencies import CurrentUserId
+from ...services.auth_sevice import get_current_user
+
 router = APIRouter(
     prefix="/scales",
-    tags=["Scales"]
+    tags=["Scales"],
+    dependencies=[Depends(get_current_user)]
 )
 
 @router.get("/teapot")
