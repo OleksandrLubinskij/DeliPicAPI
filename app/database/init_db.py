@@ -43,6 +43,7 @@ async def admin_seeder():
             birth_year=2000,
             physical_activity=1
         )
+        
         await user_service.register(new_data=admin_user, role=UserRole.Admin.value)
         print("Admin user created successfully!")
 

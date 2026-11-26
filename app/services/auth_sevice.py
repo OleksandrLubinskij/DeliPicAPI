@@ -3,7 +3,8 @@ from fastapi.security import APIKeyCookie
 from ..core.security import create_access_token, decode_access_token
 from ..schemas.user import UserCreate, UserLogin, UserOut
 from ..services.user_service import UserService, get_user_service
-from ..core.exceptions import InvalidCredentials, UserAlreadyExists, AuthenticationFailed
+from ..core.exceptions import InvalidCredentials, UserAlreadyExists, AuthenticationFailed, YouAreOrdinaryMortal
+from ..database.db_enums import UserRole
 
 cookie_scheme = APIKeyCookie(name="access_token")
 
@@ -66,6 +67,10 @@ async def get_current_user(
 
     return UserOut.model_validate(user)
 
+async def get_admin_user(current_user: UserOut = Depends(get_current_user)):
+    if current_user.role != UserRole.Admin.value:
+        raise YouAreOrdinaryMortal()
+    return current_user
 
 def get_auth_service(
     user_service: UserService = Depends(get_user_service)
