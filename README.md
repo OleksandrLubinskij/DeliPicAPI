@@ -20,6 +20,11 @@ S3_PUBLIC_URL=https://pub-<HASH>.r2.dev  # Public domain/URL for direct access t
 
 # Google Gemini AI
 GEMINY_API_KEY=AIzaSy...            # API key generated in Google AI Studio
+
+#Admin user
+LOGIN=admin_login 
+EMAIL=admin_email
+PASSWORD=admin_password
 ```
 	
 3. **Run with Docker**
