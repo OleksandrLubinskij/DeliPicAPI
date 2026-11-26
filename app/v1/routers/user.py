@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from ...services.user_service import get_user_service, UserService
-from ...schemas.user import UserModel, UserUpdate 
+from ...schemas.user import UserCreate, UserUpdate 
 
 router = APIRouter(
     prefix="/user",
@@ -30,7 +30,7 @@ async def read_record(id: int,
         return await diary_service.fetch_by_id(id=id)
 
 @router.post("/")
-async def create_record(diary_data: UserModel,
+async def create_record(diary_data: UserCreate,
                         diary_service: UserService = Depends(get_user_service)):
     result = await diary_service.register(new_data=diary_data)
     return result

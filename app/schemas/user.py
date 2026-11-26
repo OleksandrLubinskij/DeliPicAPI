@@ -11,7 +11,7 @@ class BaseUser(BaseModel):
     birth_year: int
     physical_activity: int
 
-class UserModel(BaseUser):
+class UserCreate(BaseUser):
     password: str
 
 class UserUpdate(BaseModel):
