@@ -26,6 +26,7 @@ class UserUpdate(BaseModel):
 class UserOut(BaseUser):
     id: int
     role: UserRole
+    hashed_password: str
 
     model_config = ConfigDict(from_attributes=True)
 
