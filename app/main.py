@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi.responses import JSONResponse
 from .database.connection import engine
-from .database.init_db import physical_activity_seeder
+from .database.init_db import physical_activity_seeder, admin_seeder
 from .core.exceptions import BaseError
 
 from .v1.routers import user_weight_log
@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await physical_activity_seeder()
+    await admin_seeder()
     try:
         yield
     finally:
