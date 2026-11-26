@@ -12,14 +12,17 @@ class UserService(BaseCRUDService):
     def __init__(self, repo: UserRepository):
         super().__init__(repo)
 
-    async def register(self, new_data: UserCreate) -> User:
+    async def register(
+            self, 
+            new_data: UserCreate,
+            role: UserRole = UserRole.User.value) -> User:
         plain_password = new_data.password
         hashed_password = await get_password_hash(plain_password=plain_password)
 
         new_user = User(
             **new_data.model_dump(exclude={"password"}),
             hashed_password=hashed_password,
-            role=UserRole.User
+            role=role
         )
         created_user = await self.repo.add(new_user)
         return UserOut.model_validate(created_user)

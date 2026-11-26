@@ -1,6 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import computed_field, SecretStr
-from ..database.db_enums import UserRole, UserGender
 
 class DatabaseSettins(BaseSettings):
     db_name: SecretStr
@@ -42,15 +41,9 @@ class AuthSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 class AdminAccount(BaseSettings):
-    role: str = UserRole.Admin.value
     login: SecretStr
     email: SecretStr
     password: SecretStr
-    gender: str = UserGender.Male.value
-    weight: float = 80
-    height: float = 170
-    birth_year: int = 2000
-    physical_activity: int = 1
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
@@ -58,3 +51,4 @@ db_settings = DatabaseSettins()
 s3_settings = S3Settings()
 geminy_ai_settings = GeminyAISettings()
 auth_settings = AuthSettings()
+admin_account = AdminAccount()
