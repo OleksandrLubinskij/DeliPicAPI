@@ -1,6 +1,8 @@
 from typing import List
 
 from fastapi import APIRouter, Depends
+
+from app.schemas.user import UserOut
 from ...services.diary_service import get_diary_service, DiaryService
 from ...schemas.diary import DiaryModel, DiaryUpdate, FullDiaryResponse
 from ...schemas.base_response import StatusResonse
@@ -30,13 +32,13 @@ async def read_all_records(
 
 @router.get("/date/{date}")
 async def read_all_records_by_date(
-    current_user: CurrentUserId,
     target_date: date,
+    current_user: UserOut = Depends(get_current_user),
     diary_service:DiaryService = Depends(get_diary_service)
 ) -> List[FullDiaryResponse]:
     
     return await diary_service.fetch_all_by_date(
-        user_id=current_user,
+        user_id=current_user.id,
         target_date=target_date
     )
 

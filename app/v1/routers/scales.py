@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends, UploadFile, File
+
+from ...schemas.user import UserOut
 from ...services.product_service import ProductService, get_product_service
 from ...services.ai.vision_service import VisionService, get_vision_service
 from ...services.diary_service import DiaryService, get_diary_service
@@ -21,7 +23,7 @@ async def scale_teapot():
 
 @router.post("/identify_product")
 async def identify_product(
-    current_user: CurrentUserId,
+    current_user: UserOut = Depends(get_current_user),
     file: UploadFile = File(...),
     product_service: ProductService = Depends(get_product_service),
     vision_service: VisionService = Depends(get_vision_service),
@@ -32,17 +34,17 @@ async def identify_product(
                                              product_service=product_service,
                                              vision_service=vision_service,
                                              s3=s3,
-                                             current_user=current_user)
+                                             current_user=current_user.id)
 
 
 @router.post("/save_to_diary")
 async def save_to_diary(
-    current_user: CurrentUserId,
     payload: SaveToDiaryRequest,
+    current_user: UserOut = Depends(get_current_user),
     diary_service: DiaryService = Depends(get_diary_service)
 ):
     new_diary_record = DiaryModel(
-        user_id=current_user,
+        user_id=current_user.id,
         product_name_snapshot=payload.product_name,
         product_id=payload.product_id,
         weight=payload.weight,
