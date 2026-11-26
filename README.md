@@ -28,7 +28,7 @@ PASSWORD=admin_password
 ```
 	
 3. **Run with Docker**
-   - First launch(build the image) 
+- First launch(build the image) 
 ```Bash
 docker compose up --build
 ```
